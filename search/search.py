@@ -68,9 +68,9 @@ def tinyMazeSearch(problem):
     sequence of moves will be incorrect, so only use this for tinyMaze.
     """
     from game import Directions
-    s = Directions.SOUTH
+    q = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return  [q, q, w, q, w, w, q, w]
 
 def depthFirstSearch(problem):
     """
@@ -84,15 +84,15 @@ def depthFirstSearch(problem):
 
     print "Start:", problem.getStartState()
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    print "Start'q successors:", problem.getSuccessors(problem.getStartState())
     """
-    s = util.Stack()
+    q = util.Stack()
     visited = set()
     startState = problem.getStartState()
-    s.push([(startState, "", 1.0)])
+    q.push([(startState, "", 0)])
     
-    while not s.isEmpty():
-        path = s.pop()
+    while not q.isEmpty():
+        path = q.pop()
         node = path[-1][0]
 
         if node not in visited:
@@ -103,19 +103,61 @@ def depthFirstSearch(problem):
                 if successor[0] not in visited:
                     newPath = list(path)
                     newPath.append(successor)
-                    s.push(newPath)
+                    q.push(newPath)
     return []
     # util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    q = util.Queue()
+    visited = set()
+    startState = problem.getStartState()
+    q.push([(startState, "", 0)])
+    
+    while not q.isEmpty():
+        path = q.pop()
+        node = path[-1][0]
+
+        if node not in visited:
+            visited.add(node)
+            if problem.isGoalState(node):
+                return [n[1] for n in path[1:]]
+            for successor in problem.getSuccessors(node):
+                if successor[0] not in visited:
+                    newPath = list(path)
+                    newPath.append(successor)
+                    q.push(newPath)
+    return []
+    # util.raiseNotDefined()
+
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    def costFunction(path):
+        return problem.getCostOfActions([node[1] for node in path[1:]])
+
+    q = util.PriorityQueueWithFunction(costFunction)
+    visited = set()
+    startState = problem.getStartState()
+    q.push([(startState, "", 0)])
+    
+    while not q.isEmpty():
+        path = q.pop()
+        node = path[-1][0]
+
+        if node not in visited:
+            visited.add(node)
+            if problem.isGoalState(node):
+                return [n[1] for n in path[1:]]
+            for successor in problem.getSuccessors(node):
+                if successor[0] not in visited:
+                    newPath = list(path)
+                    newPath.append(successor)
+                    q.push(newPath)
+    return []
+    # util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
@@ -126,8 +168,31 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    def costFunction(path):
+        currentState = path[-1][0]
+        return problem.getCostOfActions([node[1] for node in path[1:]]) + heuristic(currentState, problem)
+
+    q = util.PriorityQueueWithFunction(costFunction)
+    visited = set()
+    startState = problem.getStartState()
+    q.push([(startState, "", 0)])
+    
+    while not q.isEmpty():
+        path = q.pop()
+        node = path[-1][0]
+
+        if node not in visited:
+            visited.add(node)
+            if problem.isGoalState(node):
+                return [n[1] for n in path[1:]]
+            for successor in problem.getSuccessors(node):
+                if successor[0] not in visited:
+                    newPath = list(path)
+                    newPath.append(successor)
+                    q.push(newPath)
+    return []
+    # util.raiseNotDefined()
 
 
 # Abbreviations
