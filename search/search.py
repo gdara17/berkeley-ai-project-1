@@ -86,78 +86,74 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start'q successors:", problem.getSuccessors(problem.getStartState())
     """
-    q = util.Stack()
-    visited = set()
+    q = util.Stack() # Stack serves as fringe in DFS (Stack contains paths)
+    visited = set() # necessary for search in graph (to avoid examining same state multiple times)
     startState = problem.getStartState()
     q.push([(startState, "", 0)])
     
     while not q.isEmpty():
         path = q.pop()
-        node = path[-1][0]
+        node = path[-1][0] # (x, y) of the last node of current path
 
         if node not in visited:
             visited.add(node)
             if problem.isGoalState(node):
-                return [n[1] for n in path[1:]]
-            for successor in problem.getSuccessors(node):
+                return [n[1] for n in path[1:]] # list of instructions
+            for successor in problem.getSuccessors(node): # add all of the non-visited successors to fringe 
                 if successor[0] not in visited:
                     newPath = list(path)
                     newPath.append(successor)
                     q.push(newPath)
     return []
-    # util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    q = util.Queue()
-    visited = set()
+    q = util.Queue() # Queue serves as fringe in BFS (Queue contains paths)
+    visited = set() # necessary for search in graph (to avoid examining same state multiple times)
     startState = problem.getStartState()
     q.push([(startState, "", 0)])
     
     while not q.isEmpty():
         path = q.pop()
-        node = path[-1][0]
+        node = path[-1][0] # (x, y) of the last node of current path
 
         if node not in visited:
             visited.add(node)
             if problem.isGoalState(node):
-                return [n[1] for n in path[1:]]
-            for successor in problem.getSuccessors(node):
+                return [n[1] for n in path[1:]] # list of instructions
+            for successor in problem.getSuccessors(node): # add all of the non-visited successors to fringe 
                 if successor[0] not in visited:
                     newPath = list(path)
                     newPath.append(successor)
                     q.push(newPath)
     return []
-    # util.raiseNotDefined()
-
-
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     
+    # cost function to calculate the priority of path while enqueueing
     def costFunction(path):
         return problem.getCostOfActions([node[1] for node in path[1:]])
 
-    q = util.PriorityQueueWithFunction(costFunction)
-    visited = set()
+    q = util.PriorityQueueWithFunction(costFunction) # PriorityQueue serves as fringe in UCS (PriorityQueue contains paths)
+    visited = set() # necessary for search in graph (to avoid examining same state multiple times)
     startState = problem.getStartState()
     q.push([(startState, "", 0)])
     
     while not q.isEmpty():
         path = q.pop()
-        node = path[-1][0]
+        node = path[-1][0] # (x, y) of the last node of current path
 
         if node not in visited:
             visited.add(node)
             if problem.isGoalState(node):
-                return [n[1] for n in path[1:]]
-            for successor in problem.getSuccessors(node):
+                return [n[1] for n in path[1:]] # list of instructions
+            for successor in problem.getSuccessors(node): # add all of the non-visited successors to fringe 
                 if successor[0] not in visited:
                     newPath = list(path)
                     newPath.append(successor)
                     q.push(newPath)
     return []
-    # util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
@@ -169,31 +165,30 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     
+    # cost function to calculate the priority of path while enqueueing
     def costFunction(path):
         currentState = path[-1][0]
         return problem.getCostOfActions([node[1] for node in path[1:]]) + heuristic(currentState, problem)
 
-    q = util.PriorityQueueWithFunction(costFunction)
-    visited = set()
+    q = util.PriorityQueueWithFunction(costFunction) # PriorityQueue serves as fringe in UCS (PriorityQueue contains paths)
+    visited = set() # necessary for search in graph (to avoid examining same state multiple times)
     startState = problem.getStartState()
     q.push([(startState, "", 0)])
     
     while not q.isEmpty():
         path = q.pop()
-        node = path[-1][0]
+        node = path[-1][0] # (x, y) of the last node of current path
 
         if node not in visited:
             visited.add(node)
             if problem.isGoalState(node):
-                return [n[1] for n in path[1:]]
-            for successor in problem.getSuccessors(node):
+                return [n[1] for n in path[1:]] # list of instructions
+            for successor in problem.getSuccessors(node): # add all of the non-visited successors to fringe 
                 if successor[0] not in visited:
                     newPath = list(path)
                     newPath.append(successor)
                     q.push(newPath)
     return []
-    # util.raiseNotDefined()
-
 
 # Abbreviations
 bfs = breadthFirstSearch
