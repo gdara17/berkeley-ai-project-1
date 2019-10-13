@@ -455,8 +455,14 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+    foods = foodGrid.asList()
+
+    # real distance from current pos to furthest food, admissible because pacman should travel at least that much to solve the maze
+    # consistent because single step can not decrease the distance to the furthest food with more than 1
+    if foods != []:
+        return max([mazeDistance(position, food, problem.startingGameState) for food in foods]) 
+    else:
+        return 0
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -486,8 +492,7 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.uniformCostSearch(problem) # solve AnyFoodProblem with ucs
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -522,8 +527,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         """
         x,y = state
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.food[x][y] 
 
 def mazeDistance(point1, point2, gameState):
     """
